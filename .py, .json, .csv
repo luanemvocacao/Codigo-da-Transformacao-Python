@@ -1,1 +1,21 @@
+# Objetivo: Simular a recepção de um cliente com F-Strings.
+nome_cliente = input("Olá! Qual é o seu nome? ")
 
+print("\n" + "="*30)
+print(f"BEM-VINDO(A) À VOCA-BURGER, {nome_cliente.upper()}!")
+print("="*30)
+
+print("Confira nossas opções:")
+print("1 - Combo Clássico ..... R$ 25.00")
+print("2 - Combo Duplo ........ R$ 35.00")
+print("3 - Batata Suprema ..... R$ 15.00")
+print("4 - Sair")
+
+opcao = input("\nO que você deseja pedir? ")
+
+if opcao == "1":
+    print(f"\nÓtima escolha, {nome_cliente}! Preparando seu Combo.")
+elif opcao == "4":
+    print(f"\nAté logo, {nome_cliente}!")
+else:
+    print("\nOpção processada com sucesso.")
