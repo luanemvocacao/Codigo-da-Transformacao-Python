@@ -1,0 +1,12 @@
+def calculadora():
+    try:
+        x = float(input("Digite o numerador: "))
+        y = float(input("Digite o denominador: "))
+        resultado = x / y
+        print(f"Resultado: {resultado}")
+    except ZeroDivisionError:
+        print("Erro: Divisão por zero não é permitida.")
+    except ValueError:
+        print("Erro: Por favor, digite números válidos.")
+
+calculadora()
