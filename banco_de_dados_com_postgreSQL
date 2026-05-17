@@ -1,0 +1,148 @@
+import sqlite3
+
+# =========================
+# CONEXÃO COM BANCO
+# =========================
+conn = sqlite3.connect("database.db")
+cursor = conn.cursor()
+
+# =========================
+# CRIAÇÃO DA TABELA
+# =========================
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS clientes (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    nome TEXT NOT NULL,
+    email TEXT NOT NULL
+)
+""")
+
+conn.commit()
+
+# =========================
+# FUNÇÕES CRUD
+# =========================
+
+# CREATE - Inserir cliente
+def inserir_cliente(nome, email):
+    cursor.execute("""
+    INSERT INTO clientes (nome, email)
+    VALUES (?, ?)
+    """, (nome, email))
+
+    conn.commit()
+    print(" Cliente inserido com sucesso!")
+
+
+# READ - Listar clientes
+def listar_clientes():
+    cursor.execute("SELECT * FROM clientes")
+
+    clientes = cursor.fetchall()
+
+    print("\n LISTA DE CLIENTES")
+    print("-" * 30)
+
+    for cliente in clientes:
+        print(f"ID: {cliente[0]}")
+        print(f"Nome: {cliente[1]}")
+        print(f"Email: {cliente[2]}")
+        print("-" * 30)
+
+
+# UPDATE - Atualizar cliente
+def atualizar_cliente(id, novo_nome, novo_email):
+    cursor.execute("""
+    UPDATE clientes
+    SET nome = ?, email = ?
+    WHERE id = ?
+    """, (novo_nome, novo_email, id))
+
+    conn.commit()
+
+    print(" Cliente atualizado com sucesso!")
+
+
+# DELETE - Deletar cliente
+def deletar_cliente(id):
+    cursor.execute("""
+    DELETE FROM clientes
+    WHERE id = ?
+    """, (id,))
+
+    conn.commit()
+
+    print(" Cliente deletado com sucesso!")
+
+
+# =========================
+# CONSULTAS SQL
+# =========================
+
+# Filtrar clientes com nome começando em A
+def clientes_com_a():
+    cursor.execute("""
+    SELECT * FROM clientes
+    WHERE nome LIKE 'A%'
+    """)
+
+    resultados = cursor.fetchall()
+
+    print("\n CLIENTES COM A")
+    print("-" * 30)
+
+    for cliente in resultados:
+        print(cliente)
+
+
+# =========================
+# MENU
+# =========================
+
+while True:
+    print("""
+========= MENU =========
+1 - Inserir Cliente
+2 - Listar Clientes
+3 - Atualizar Cliente
+4 - Deletar Cliente
+5 - Buscar Clientes com A
+0 - Sair
+========================
+""")
+
+    opcao = input("Escolha uma opção: ")
+
+    if opcao == "1":
+        nome = input("Nome: ")
+        email = input("Email: ")
+
+        inserir_cliente(nome, email)
+
+    elif opcao == "2":
+        listar_clientes()
+
+    elif opcao == "3":
+        id_cliente = int(input("ID do cliente: "))
+        novo_nome = input("Novo nome: ")
+        novo_email = input("Novo email: ")
+
+        atualizar_cliente(id_cliente, novo_nome, novo_email)
+
+    elif opcao == "4":
+        id_cliente = int(input("ID do cliente: "))
+
+        deletar_cliente(id_cliente)
+
+    elif opcao == "5":
+        clientes_com_a()
+
+    elif opcao == "0":
+        print("Encerrando sistema...")
+        break
+
+    else:
+        print(" Opção inválida!")
+
+# Fecha conexão
+conn.close()
