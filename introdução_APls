@@ -1,0 +1,56 @@
+# arquivo: clima.py
+
+import requests
+
+# Sua chave da API OpenWeatherMap
+API_KEY = "SUA_API_KEY"
+
+# Cidade desejada
+cidade = input("Digite o nome da cidade: ")
+
+# URL da API
+url = (
+    f"https://api.openweathermap.org/data/2.5/weather"
+    f"?q={cidade}&appid={API_KEY}&units=metric&lang=pt_br"
+)
+
+try:
+    # Fazendo requisição para a API
+    resposta = requests.get(url, timeout=5)
+
+    # Verifica se houve erro HTTP
+    resposta.raise_for_status()
+
+    # Convertendo resposta para JSON
+    dados = resposta.json()
+
+    # Verifica se a cidade foi encontrada
+    if dados["cod"] != 200:
+        print("Erro:", dados["message"])
+
+    else:
+        # Pegando informações importantes
+        temperatura = dados["main"]["temp"]
+        sensacao = dados["main"]["feels_like"]
+        umidade = dados["main"]["humidity"]
+        clima = dados["weather"][0]["description"]
+
+        # Exibindo dados formatados
+        print("\n===== PREVISÃO DO TEMPO =====")
+        print(f"Cidade: {cidade}")
+        print(f"Temperatura: {temperatura}°C")
+        print(f"Sensação térmica: {sensacao}°C")
+        print(f"Umidade: {umidade}%")
+        print(f"Condição climática: {clima}")
+
+except requests.exceptions.Timeout:
+    print("Erro: tempo de conexão excedido.")
+
+except requests.exceptions.ConnectionError:
+    print("Erro: falha de conexão com a internet.")
+
+except requests.exceptions.HTTPError as erro_http:
+    print(f"Erro HTTP: {erro_http}")
+
+except requests.exceptions.RequestException as erro:
+    print(f"Erro na requisição: {erro}")
