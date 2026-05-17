@@ -1,0 +1,39 @@
+import unittest
+
+
+# Classe Calculadora
+class Calculadora:
+
+    def somar(self, a, b):
+        return a + b
+
+    def dividir(self, a, b):
+        if b == 0:
+            raise ValueError("Divisão por zero não é permitida.")
+        return a / b
+
+
+# Testes da Calculadora
+class TestCalculadora(unittest.TestCase):
+
+    def setUp(self):
+        self.calc = Calculadora()
+
+    # Teste da soma
+    def test_somar(self):
+        self.assertEqual(self.calc.somar(2, 3), 5)
+        self.assertEqual(self.calc.somar(-1, 1), 0)
+
+    # Teste da divisão
+    def test_dividir(self):
+        self.assertEqual(self.calc.dividir(10, 2), 5)
+
+    # Teste de divisão por zero
+    def test_dividir_por_zero(self):
+        with self.assertRaises(ValueError):
+            self.calc.dividir(10, 0)
+
+
+# Executa os testes
+if __name__ == '__main__':
+    unittest.main()
